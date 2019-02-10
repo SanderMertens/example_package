@@ -1,0 +1,8 @@
+{
+    "id": "example_package",
+    "type": "package",
+    "value": {
+        "author": "Sander Mertens",
+        "description": "Example bake package"
+    }
+}
