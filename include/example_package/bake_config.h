@@ -17,6 +17,9 @@
 #ifndef EXAMPLE_PACKAGE_BAKE_CONFIG_H
 #define EXAMPLE_PACKAGE_BAKE_CONFIG_H
 
+/* Generated includes are specific to the bake environment. If a project is not
+ * built with bake, it will have to provide alternative methods for including
+ * its dependencies. */
 /* Headers of public dependencies */
 /* No dependencies */
 
@@ -26,14 +29,18 @@
 #endif
 
 /* Convenience macro for exporting symbols */
-#if EXAMPLE_PACKAGE_IMPL && defined _MSC_VER
-#define EXAMPLE_PACKAGE_EXPORT __declspec(dllexport)
-#elif EXAMPLE_PACKAGE_IMPL
-#define EXAMPLE_PACKAGE_EXPORT __attribute__((__visibility__("default")))
-#elif defined _MSC_VER
-#define EXAMPLE_PACKAGE_EXPORT __declspec(dllimport)
+#ifndef EXAMPLE_PACKAGE_STATIC
+  #if EXAMPLE_PACKAGE_IMPL && (defined(_MSC_VER) || defined(__MINGW32__))
+    #define EXAMPLE_PACKAGE_EXPORT __declspec(dllexport)
+  #elif EXAMPLE_PACKAGE_IMPL
+    #define EXAMPLE_PACKAGE_EXPORT __attribute__((__visibility__("default")))
+  #elif defined _MSC_VER
+    #define EXAMPLE_PACKAGE_EXPORT __declspec(dllimport)
+  #else
+    #define EXAMPLE_PACKAGE_EXPORT
+  #endif
 #else
-#define EXAMPLE_PACKAGE_EXPORT
+  #define EXAMPLE_PACKAGE_EXPORT
 #endif
 
 #endif
